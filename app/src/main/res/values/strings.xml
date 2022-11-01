@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="username">Username</string>
+    <string name="description_img_story">picture story</string>
+    <string name="text_description">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old....</string>
+    <string name="icon_application">icon application</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email">email</string>
+    <string name="hint_password">password</string>
+    <string name="name_hint">name</string>
+</resources>

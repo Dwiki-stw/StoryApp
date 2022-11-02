@@ -1,12 +1,13 @@
 package com.example.storyapp.ui.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.annotation.StringRes
-import com.example.storyapp.R
+import android.os.Handler
+import android.os.Looper
 import com.example.storyapp.databinding.ActivityMainBinding
-import com.google.android.material.tabs.TabLayoutMediator
+import com.example.storyapp.ui.activity.Authentication.AuthenticationActivity
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,19 +20,15 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.hide()
 
-        val viewPagerAdpater = MainAdapter(this)
-        binding.viewPager.adapter = viewPagerAdpater
-        TabLayoutMediator(binding.tablayout, binding.viewPager){ tab, position ->
-            tab.text = resources.getString(TAB_TITLES[position])
-        }.attach()
-    }
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            val intent = Intent(this@MainActivity, AuthenticationActivity::class.java)
+            startActivity(intent)
+            finish()
+        }, 3000)
 
-    companion object{
-        @StringRes
-        private val TAB_TITLES = intArrayOf(
-            R.string.login,
-            R.string.register
-        )
+
     }
 }

@@ -19,7 +19,7 @@
             android:name=".ui.activity.ListStoryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.AuthenticationActivity"
+            android:name=".ui.activity.Authentication.AuthenticationActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.MainActivity"

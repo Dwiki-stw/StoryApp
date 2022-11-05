@@ -97,7 +97,7 @@ class CustomEditText : AppCompatEditText {
     private fun passwordValidation(text: String?): Boolean{
         val check = text?.length!! >= 6
         if (!check)
-            setError("password less than 6")
+            error = "password less than 6"
 
         return check
     }
@@ -105,7 +105,7 @@ class CustomEditText : AppCompatEditText {
     private fun emailValidation(text: String?): Boolean{
         val check = Patterns.EMAIL_ADDRESS.matcher(text).matches()
         if(!check)
-            setError("email invalid")
+            error = "email invalid"
 
         return check
     }

@@ -1,16 +1,15 @@
 package com.example.storyapp.ui.fragment.login
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import com.example.storyapp.R
 import com.example.storyapp.databinding.FragmentLoginBinding
+import com.example.storyapp.ui.activity.listStory.ListStoryActivity
 
 class LoginFragment : Fragment() {
 
@@ -32,7 +31,10 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonLogin.setOnClickListener{
-            loginViewModel.setDataLogin(binding.loginEmail.text.toString(), binding.loginPassword.text.toString())
+            val intent = Intent(this@LoginFragment.requireContext(), ListStoryActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+            //loginViewModel.setDataLogin(binding.loginEmail.text.toString(), binding.loginPassword.text.toString())
         }
 
         loginViewModel.loginResult.observe(viewLifecycleOwner){

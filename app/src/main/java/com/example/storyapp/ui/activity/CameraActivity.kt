@@ -14,10 +14,9 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import com.example.storyapp.R
 import com.example.storyapp.databinding.ActivityCameraBinding
 import com.example.storyapp.helper.createFile
-import com.example.storyapp.ui.fragment.AddStoryFragment
+import com.example.storyapp.ui.activity.addstory.AddStoryActivity
 
 
 class CameraActivity : AppCompatActivity() {
@@ -94,7 +93,7 @@ class CameraActivity : AppCompatActivity() {
                 val intent = Intent()
                 intent.putExtra("picture", photoFile)
                 intent.putExtra("isBackCamera", cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA)
-                setResult(AddStoryFragment.CAMERA_RESULT, intent)
+                setResult(AddStoryActivity.CAMERA_RESULT, intent)
                 finish()
             }
 

@@ -8,7 +8,7 @@
     tools:context=".ui.activity.listStory.ListStoryActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_users"
+        android:id="@+id/rv_story"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"

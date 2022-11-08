@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="username">Username</string>
+    <string name="description_img_story">picture story</string>
+    <string name="text_description">Contrary to popular belief, Lorem Ipsum is not…</string>
+    <string name="icon_application">icon application</string>
+    <string name="login">Masuk</string>
+    <string name="register">Daftar</string>
+    <string name="email">surel</string>
+    <string name="hint_password">sandi</string>
+    <string name="name_hint">nama</string>
+    <string name="name_in_menu">nama</string>
+    <string name="languange_in_menu">Bahasa</string>
+    <string name="logout_in_menu">keluar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="send">KIRIM</string>
+    <string name="description">Deskripsi</string>
+    <string name="picture">Tambah Gambar</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="add_story">Tambah Cerita</string>
+    <string name="capture_photo">Tangkap Foto</string>
+    <string name="title_menu_user">user</string>
+</resources>

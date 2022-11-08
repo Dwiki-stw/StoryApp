@@ -1,11 +1,10 @@
 package com.example.storyapp.api
 
+import com.example.storyapp.response.ResponseListStory
 import com.example.storyapp.response.ResponseLogin
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
 import com.example.storyapp.response.ResponseRegister
 import retrofit2.Call
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -23,5 +22,10 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String
     ): Call<ResponseLogin>
+
+    @GET("stories")
+    fun getStory(
+        @Header("Authorization") auth: String
+    ): Call<ResponseListStory>
 
 }

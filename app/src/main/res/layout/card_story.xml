@@ -19,7 +19,7 @@
             android:id="@+id/img_user"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            tools:src="@tools:sample/avatars"
+            android:src="@drawable/ic_person"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             app:layout_constraintTop_toTopOf="parent"
@@ -50,10 +50,10 @@
             tools:src="@drawable/pemandangan" />
 
         <TextView
-            android:id="@+id/story_user"
+            android:id="@+id/description"
             style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="30dp"
             tools:text="@string/text_description"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"

@@ -15,20 +15,33 @@ class LoginViewModel : ViewModel() {
     private val _loginResult = MutableLiveData<ResponseLogin>()
     val loginResult: LiveData<ResponseLogin> = _loginResult
 
+    private val _message = MutableLiveData<String>()
+    val message: LiveData<String> = _message
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading : LiveData<Boolean> = _isLoading
+
     private fun loginUser(){
+        _isLoading.value = true
         val client = ApiConfig.getApiService().login(EMAIL, PASSWORD)
         client.enqueue(object : Callback<ResponseLogin>{
-            override fun onResponse(call: Call<ResponseLogin>, response: Response<ResponseLogin>) {
+            override fun onResponse(
+                call: Call<ResponseLogin>,
+                response: Response<ResponseLogin>
+            ) {
+                _isLoading.value = false
                 val responseBody = response.body()
                 if (response.isSuccessful && responseBody != null){
                     _loginResult.value = responseBody!!
                 }
                 else{
+                    _message.value = response.message()
                     Log.e(TAG, "onResponse2: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<ResponseLogin>, t: Throwable) {
+                _isLoading.value = false
                 Log.e(TAG, "onResponse3: ${t.message}")
             }
 

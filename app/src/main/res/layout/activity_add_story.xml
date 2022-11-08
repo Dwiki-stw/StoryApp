@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.AddStoryActivity">
+    tools:context=".ui.activity.addstory.AddStoryActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_picture"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@drawable/background_add_picture"
+        android:padding="1dp"
         android:layout_marginTop="40dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"

@@ -2,7 +2,7 @@
     <string name="app_name">StoryApp</string>
     <string name="username">Username</string>
     <string name="description_img_story">picture story</string>
-    <string name="text_description">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old....</string>
+    <string name="text_description">Contrary to popular belief, Lorem Ipsum is not…</string>
     <string name="icon_application">icon application</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
@@ -13,7 +13,6 @@
     <string name="languange_in_menu">languange</string>
     <string name="logout_in_menu">logout</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="send">SEND</string>
     <string name="description">Description</string>
     <string name="picture">Add Picture</string>
@@ -21,4 +20,5 @@
     <string name="gallery">Gallery</string>
     <string name="add_story">Add Story</string>
     <string name="capture_photo">capture photo</string>
+    <string name="title_menu_user">user</string>
 </resources>

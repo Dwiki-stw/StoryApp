@@ -2,6 +2,7 @@ package com.example.storyapp.ui.fragment.register
 
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.storyapp.api.ApiConfig
@@ -12,27 +13,37 @@ import retrofit2.Response
 
 class RegisterViewModel : ViewModel() {
 
-    val responseMessage = MutableLiveData<String>()
+    private val _responseRegister = MutableLiveData<ResponseRegister>()
+    val responseRegister: LiveData<ResponseRegister> = _responseRegister
+
+    private val _message = MutableLiveData<String>()
+    val message : LiveData<String> = _message
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
 
     private fun registerUser(){
+        _isLoading.value = true
         val client = ApiConfig.getApiService().register(NAME, EMAIL, PASSWORD)
         client.enqueue(object : Callback<ResponseRegister>{
             override fun onResponse(
                 call: Call<ResponseRegister>,
                 response: Response<ResponseRegister>
             ) {
+                _isLoading.value = false
                 val responseBody = response.body()
                 if (response.isSuccessful && responseBody != null){
                     Log.e(TAG, "onResponse1: ${responseBody.message}" )
-                    responseMessage.value = responseBody.message!!
+                    _responseRegister.value = responseBody!!
                 }
                 else{
-                    responseMessage.value = responseBody?.message ?: "email already"
+                    _message.value = response.message()
                     Log.e(TAG, "onResponse2: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<ResponseRegister>, t: Throwable) {
+                _isLoading.value = false
                 Log.e(TAG, "onResponse3: ${t.message}")
             }
 

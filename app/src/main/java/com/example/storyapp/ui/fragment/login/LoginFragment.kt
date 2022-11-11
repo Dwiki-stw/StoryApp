@@ -1,6 +1,5 @@
 package com.example.storyapp.ui.fragment.login
 
-import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context

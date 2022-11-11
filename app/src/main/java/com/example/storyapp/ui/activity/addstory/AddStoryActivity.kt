@@ -146,7 +146,7 @@ class AddStoryActivity : AppCompatActivity() {
                     val responseBody = response.body()
                     if(response.isSuccessful && responseBody != null){
                         Toast.makeText(this@AddStoryActivity, responseBody.message, Toast.LENGTH_SHORT).show()
-                        backToList(true)
+                        backToList()
                     }else{
                         Toast.makeText(this@AddStoryActivity, response.message(), Toast.LENGTH_SHORT).show()
                     }
@@ -169,12 +169,10 @@ class AddStoryActivity : AppCompatActivity() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun backToList(isSucces: Boolean){
-        if (isSucces){
-            val intent = Intent(this, ListStoryActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+    private fun backToList(){
+        val intent = Intent(this, ListStoryActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     companion object{

@@ -2,6 +2,8 @@ package com.example.storyapp.ui.fragment.register
 
 
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -30,6 +32,7 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        playAnimation()
 
         binding.buttonRegister.setOnClickListener {
             registerViewModel.setDataRegister(binding.registerName.text.toString(), binding.registerEmail.text.toString(), binding.registerPassword.text.toString())
@@ -53,6 +56,18 @@ class RegisterFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun playAnimation(){
+        val editName = ObjectAnimator.ofFloat(binding.registerName, View.ALPHA, 1f).setDuration(500)
+        val editEmail = ObjectAnimator.ofFloat(binding.registerEmail, View.ALPHA, 1f).setDuration(500)
+        val editPassword = ObjectAnimator.ofFloat(binding.registerPassword, View.ALPHA, 1f).setDuration(500)
+        val buttonRegister = ObjectAnimator.ofFloat(binding.buttonRegister, View.ALPHA, 1f).setDuration(500)
+
+        AnimatorSet().apply {
+            playSequentially(editName, editEmail, editPassword, buttonRegister)
+            start()
+        }
     }
 
     private fun showResult(message: String){

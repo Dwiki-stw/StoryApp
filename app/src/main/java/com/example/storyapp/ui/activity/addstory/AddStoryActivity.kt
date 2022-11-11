@@ -1,6 +1,7 @@
 package com.example.storyapp.ui.activity.addstory
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.content.pm.PackageManager
@@ -8,14 +9,31 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.asLiveData
+import com.example.storyapp.api.ApiConfig
 import com.example.storyapp.databinding.ActivityAddStoryBinding
+import com.example.storyapp.datastore.UserPreference
 import com.example.storyapp.helper.rotateBitmap
 import com.example.storyapp.helper.uriToFile
+import com.example.storyapp.response.ResponseAddStory
 import com.example.storyapp.ui.activity.CameraActivity
+import com.example.storyapp.ui.activity.listStory.ListStoryActivity
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 
 class AddStoryActivity : AppCompatActivity() {
@@ -23,10 +41,16 @@ class AddStoryActivity : AppCompatActivity() {
     private var _binding: ActivityAddStoryBinding? = null
     private val binding get() = _binding!!
 
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preference")
+
+    private var file: File? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val userPreference = UserPreference.getInstance(dataStore)
 
         if (!allPermissionsGranted()){
             ActivityCompat.requestPermissions(
@@ -45,6 +69,14 @@ class AddStoryActivity : AppCompatActivity() {
             intent.type = "image/*"
             val chooser = Intent.createChooser(intent, "Choose a Picture")
             launcherIntentGallery.launch(chooser)
+        }
+
+        binding.btnSend.setOnClickListener{
+            if (binding.tiDesc.text != null){
+                userPreference.getToken().asLiveData().observe(this){
+                    uploadStory(it)
+                }
+            }
         }
     }
 
@@ -73,6 +105,7 @@ class AddStoryActivity : AppCompatActivity() {
             val myFile = it.data?.getSerializableExtra("picture") as File
             val isBackCamera = it.data?.getBooleanExtra("isBackCamera", true) as Boolean
 
+            file = myFile
             val result = rotateBitmap(
                 BitmapFactory.decodeFile(myFile.path), isBackCamera
             )
@@ -86,7 +119,61 @@ class AddStoryActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             val selectedImg: Uri = result.data?.data as Uri
             val myFile = uriToFile(selectedImg, this)
+            file = myFile
             binding.imagePreview.setImageURI(selectedImg)
+        }
+    }
+
+    private fun uploadStory(token: String){
+        if(file != null){
+
+            val text = binding.tiDesc.text.toString()
+            val description = text.toRequestBody("text/plain".toMediaType())
+            val requestImageFile = file!!.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                "photo",
+                file!!.name,
+                requestImageFile
+            )
+            showLoading(true)
+            val client = ApiConfig.getApiService().addStory("Bearer $token", imageMultipart, description)
+            client.enqueue(object : Callback<ResponseAddStory>{
+                override fun onResponse(
+                    call: Call<ResponseAddStory>,
+                    response: Response<ResponseAddStory>
+                ) {
+                    showLoading(false)
+                    val responseBody = response.body()
+                    if(response.isSuccessful && responseBody != null){
+                        Toast.makeText(this@AddStoryActivity, responseBody.message, Toast.LENGTH_SHORT).show()
+                        backToList(true)
+                    }else{
+                        Toast.makeText(this@AddStoryActivity, response.message(), Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+
+                override fun onFailure(call: Call<ResponseAddStory>, t: Throwable) {
+                    showLoading(false)
+                    Toast.makeText(this@AddStoryActivity, t.message, Toast.LENGTH_SHORT).show()
+                }
+
+            })
+
+        }else{
+            Toast.makeText(this@AddStoryActivity, "Masukan Gambar yang ingin di Upload", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun showLoading(isLoading : Boolean){
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun backToList(isSucces: Boolean){
+        if (isSucces){
+            val intent = Intent(this, ListStoryActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 

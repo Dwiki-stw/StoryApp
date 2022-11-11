@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -20,8 +19,8 @@ import com.example.storyapp.R
 import com.example.storyapp.databinding.ActivityListStoryBinding
 import com.example.storyapp.datastore.UserPreference
 import com.example.storyapp.response.ListStoryItem
-import com.example.storyapp.response.LoginResult
 import com.example.storyapp.ui.activity.Authentication.AuthenticationActivity
+import com.example.storyapp.ui.activity.detailstory.DetailStoryActivity
 import com.example.storyapp.ui.activity.addstory.AddStoryActivity
 import kotlinx.coroutines.launch
 
@@ -64,7 +63,7 @@ class ListStoryActivity : AppCompatActivity() {
         val user = menu!!.findItem(R.id.name_user)
         val userPreference = UserPreference.getInstance(dataStore)
         userPreference.getName().asLiveData().observe(this){
-            user.title = "account : $it"
+            user.title = it
         }
 
 
@@ -93,6 +92,15 @@ class ListStoryActivity : AppCompatActivity() {
         val adapter = ListStoryAdapter(listStory)
         binding.rvStory.layoutManager = LinearLayoutManager(this)
         binding.rvStory.adapter = adapter
+
+        adapter.setOnItemClickCallback(object: ListStoryAdapter.OnItemClickCallback{
+            override fun onItemClicked(id: String?) {
+                val intent = Intent(this@ListStoryActivity, DetailStoryActivity::class.java)
+                intent.putExtra(DetailStoryActivity.ID, id)
+                startActivity(intent)
+            }
+
+        })
     }
 
     private fun showLoading(isLoading : Boolean){

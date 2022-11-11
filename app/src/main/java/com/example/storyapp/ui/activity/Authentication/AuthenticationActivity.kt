@@ -1,7 +1,9 @@
 package com.example.storyapp.ui.activity.Authentication
 
+import android.animation.ObjectAnimator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.StringRes
 import com.example.storyapp.R
 import com.example.storyapp.databinding.ActivityAuthenticationBinding
@@ -19,6 +21,12 @@ class AuthenticationActivity : AppCompatActivity() {
         _binding = ActivityAuthenticationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        ObjectAnimator.ofFloat(binding.iconApp, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
         supportActionBar?.hide()
 
         val viewPagerAdpater = AuthenticationAdapter(this)
@@ -27,6 +35,8 @@ class AuthenticationActivity : AppCompatActivity() {
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
     }
+
+
 
     companion object{
         @StringRes

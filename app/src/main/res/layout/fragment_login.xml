@@ -8,6 +8,7 @@
 
     <com.example.storyapp.ui.customeview.editview.CustomEditText
         android:id="@+id/login_email"
+        android:alpha="0"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/background_edit_text"
@@ -26,6 +27,7 @@
 
     <com.example.storyapp.ui.customeview.editview.CustomEditText
         android:id="@+id/login_password"
+        android:alpha="0"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/background_edit_text"
@@ -43,6 +45,7 @@
 
     <Button
         android:id="@+id/button_login"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:text="@string/login"

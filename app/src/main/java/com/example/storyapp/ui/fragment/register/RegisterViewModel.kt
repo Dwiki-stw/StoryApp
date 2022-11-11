@@ -44,6 +44,7 @@ class RegisterViewModel : ViewModel() {
 
             override fun onFailure(call: Call<ResponseRegister>, t: Throwable) {
                 _isLoading.value = false
+                _message.value = t.message
                 Log.e(TAG, "onResponse3: ${t.message}")
             }
 

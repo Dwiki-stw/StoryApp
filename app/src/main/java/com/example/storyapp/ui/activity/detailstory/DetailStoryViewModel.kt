@@ -1,43 +1,44 @@
-package com.example.storyapp.ui.activity.listStory
+package com.example.storyapp.ui.activity.detailstory
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.storyapp.api.ApiConfig
-import com.example.storyapp.response.ListStoryItem
-import com.example.storyapp.response.ResponseListStory
+import com.example.storyapp.response.ResponseDetailStory
+import com.example.storyapp.response.Story
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ListStoryViewModel: ViewModel() {
 
-    private val _listStory = MutableLiveData<List<ListStoryItem>>()
-    val listStory: LiveData<List<ListStoryItem>> = _listStory
+class DetailStoryViewModel: ViewModel() {
+
+    private val _story = MutableLiveData<Story>()
+    val story: LiveData<Story> = _story
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private fun getListStory(){
+    private fun getStory(){
         _isLoading.value = true
-        val client = ApiConfig.getApiService().getAllStory("Bearer $AUTH")
-        client.enqueue(object : Callback<ResponseListStory>{
+        val client = ApiConfig.getApiService().getStory("Bearer $AUTH", ID)
+        client.enqueue(object : Callback<ResponseDetailStory>{
             override fun onResponse(
-                call: Call<ResponseListStory>,
-                response: Response<ResponseListStory>
+                call: Call<ResponseDetailStory>,
+                response: Response<ResponseDetailStory>
             ) {
                 _isLoading.value = false
                 val responseBody = response.body()
                 if(response.isSuccessful && responseBody != null){
-                    _listStory.value = responseBody.listStory
+                    _story.value = responseBody.story!!
                 }
                 else{
                     Log.e(TAG, "onResponse2: ${response.message()}")
                 }
             }
 
-            override fun onFailure(call: Call<ResponseListStory>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseDetailStory>, t: Throwable) {
                 _isLoading.value = false
                 Log.e(TAG, "onResponse2: ${t.message}")
             }
@@ -45,17 +46,18 @@ class ListStoryViewModel: ViewModel() {
         })
     }
 
-    fun setAuth(auth: String){
+    fun setID(auth: String, id: String){
         AUTH = auth
+        ID = id
 
-        getListStory()
+        getStory()
     }
 
     companion object{
-        private const val TAG = "ListStoryViewModel"
+        private const val TAG = "DetailStoryViewModel"
 
         private var AUTH = "auth"
+        private var ID = "id"
     }
-
 
 }

@@ -8,13 +8,9 @@
 
         <menu>
             <item android:id="@+id/name_user"
+
                 android:title="@string/name_in_menu"
                 android:icon="@drawable/ic_person"
-                app:showAsAction="ifRoom"/>
-
-            <item android:id="@+id/app_language"
-                android:title="@string/languange_in_menu"
-                android:icon="@drawable/ic_language"
                 app:showAsAction="ifRoom"/>
 
             <item android:id="@+id/user_logout"

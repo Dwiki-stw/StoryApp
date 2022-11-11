@@ -1,5 +1,8 @@
 package com.example.storyapp.ui.fragment.login
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -43,6 +46,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        playAnimation()
+
         binding.buttonLogin.setOnClickListener{
             loginViewModel.setDataLogin(binding.loginEmail.text.toString(), binding.loginPassword.text.toString())
         }
@@ -60,9 +65,21 @@ class LoginFragment : Fragment() {
         }
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun playAnimation(){
+        val editEmail = ObjectAnimator.ofFloat(binding.loginEmail, View.ALPHA, 1f).setDuration(2000)
+        val editPassword = ObjectAnimator.ofFloat(binding.loginPassword, View.ALPHA, 1f).setDuration(2000)
+        val buttonLogin = ObjectAnimator.ofFloat(binding.buttonLogin, View.ALPHA, 1f).setDuration(2000)
+
+        AnimatorSet().apply {
+            playTogether(editEmail, editPassword, buttonLogin)
+            start()
+        }
     }
 
     private fun login(responseLogin: ResponseLogin){
@@ -75,11 +92,6 @@ class LoginFragment : Fragment() {
             startActivity(intent)
             activity?.finish()
         }
-    }
-
-    private fun enableButton(email: Boolean, password: Boolean){
-        Log.e("check", "enableButton: $email, $password", )
-        binding.buttonLogin.isEnabled = email && password
     }
 
     private fun saveLoginState(save: LoginResult){

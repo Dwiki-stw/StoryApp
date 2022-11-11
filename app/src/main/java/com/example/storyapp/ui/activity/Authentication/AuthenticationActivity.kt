@@ -7,7 +7,6 @@ import android.view.View
 import androidx.annotation.StringRes
 import com.example.storyapp.R
 import com.example.storyapp.databinding.ActivityAuthenticationBinding
-import com.example.storyapp.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
 class AuthenticationActivity : AppCompatActivity() {

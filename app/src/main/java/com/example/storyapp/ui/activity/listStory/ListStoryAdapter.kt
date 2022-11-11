@@ -51,11 +51,10 @@ class ListStoryAdapter (private val listStories: List<ListStoryItem>): RecyclerV
 
         private fun get50Character(description: String) : String{
 
-            if(description.length > 50){
-                return description.substring(0..49) + "…"
-            }
-            else{
-                return description
+            return if(description.length > 50){
+                description.substring(0..49) + "…"
+            } else{
+                description
             }
         }
 

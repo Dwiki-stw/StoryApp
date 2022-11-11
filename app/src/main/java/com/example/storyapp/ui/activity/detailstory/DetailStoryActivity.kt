@@ -10,7 +10,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.asLiveData
 import com.bumptech.glide.Glide
-import com.example.storyapp.R
 import com.example.storyapp.databinding.ActivityDetailStoryBinding
 import com.example.storyapp.datastore.UserPreference
 import com.example.storyapp.response.Story

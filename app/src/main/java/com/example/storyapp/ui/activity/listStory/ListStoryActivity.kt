@@ -16,11 +16,12 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.storyapp.R
+import com.example.storyapp.adapter.PagingAdapter
 import com.example.storyapp.databinding.ActivityListStoryBinding
 import com.example.storyapp.datastore.UserPreference
-import com.example.storyapp.response.ListStoryItem
+import com.example.storyapp.helper.ViewModelFactory
 import com.example.storyapp.ui.activity.Authentication.AuthenticationActivity
-import com.example.storyapp.ui.activity.detailstory.DetailStoryActivity
+import com.example.storyapp.ui.activity.maps.MapsActivity
 import com.example.storyapp.ui.activity.addstory.AddStoryActivity
 import kotlinx.coroutines.launch
 
@@ -29,7 +30,9 @@ class ListStoryActivity : AppCompatActivity() {
     private var _binding: ActivityListStoryBinding? = null
     private val binding get() = _binding!!
 
-    private val listStoryViewModel: ListStoryViewModel by viewModels()
+    private val listStoryViewModel: ListStoryViewModel by viewModels{
+        ViewModelFactory(this)
+    }
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preference")
 
@@ -38,21 +41,29 @@ class ListStoryActivity : AppCompatActivity() {
         _binding = ActivityListStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val userPreference = UserPreference.getInstance(dataStore)
-        userPreference.getToken().asLiveData().observe(this){
-            listStoryViewModel.setAuth(it)
-        }
 
-        listStoryViewModel.listStory.observe(this){
-            showStory(it)
-        }
+        showStory()
 
-        listStoryViewModel.isLoading.observe(this){
-            showLoading(it)
-        }
+//        val userPreference = UserPreference.getInstance(dataStore)
+//        userPreference.getToken().asLiveData().observe(this){
+//            listStoryViewModel.setAuth(it)
+//        }
+//
+//        listStoryViewModel.listStory.observe(this){
+//            showStory(it)
+//        }
+//
+//        listStoryViewModel.isLoading.observe(this){
+//            showLoading(it)
+//        }
 
         binding.fab.setOnClickListener {
             val intent = Intent(this@ListStoryActivity, AddStoryActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.fabMap.setOnClickListener {
+            val intent = Intent(this@ListStoryActivity, MapsActivity::class.java)
             startActivity(intent)
         }
     }
@@ -88,19 +99,28 @@ class ListStoryActivity : AppCompatActivity() {
         _binding = null
     }
 
-    private fun showStory(listStory: List<ListStoryItem>){
-        val adapter = ListStoryAdapter(listStory)
+    private fun showStory(){
+
+        val adapter = PagingAdapter()
         binding.rvStory.layoutManager = LinearLayoutManager(this)
         binding.rvStory.adapter = adapter
 
-        adapter.setOnItemClickCallback(object: ListStoryAdapter.OnItemClickCallback{
-            override fun onItemClicked(id: String?) {
-                val intent = Intent(this@ListStoryActivity, DetailStoryActivity::class.java)
-                intent.putExtra(DetailStoryActivity.ID, id)
-                startActivity(intent)
-            }
+        listStoryViewModel.listStory.observe(this){
+            adapter.submitData(lifecycle, it)
+        }
 
-        })
+//        val adapter = ListStoryAdapter(listStory)
+//        binding.rvStory.layoutManager = LinearLayoutManager(this)
+//        binding.rvStory.adapter = adapter
+//
+//        adapter.setOnItemClickCallback(object: ListStoryAdapter.OnItemClickCallback{
+//            override fun onItemClicked(id: String?) {
+//                val intent = Intent(this@ListStoryActivity, DetailStoryActivity::class.java)
+//                intent.putExtra(DetailStoryActivity.ID, id)
+//                startActivity(intent)
+//            }
+//
+//        })
     }
 
     private fun showLoading(isLoading : Boolean){

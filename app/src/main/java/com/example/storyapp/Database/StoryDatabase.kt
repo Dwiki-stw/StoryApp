@@ -8,13 +8,14 @@ import com.example.storyapp.response.ListStoryItem
 
 
 @Database(
-    entities = [ListStoryItem::class],
+    entities = [ListStoryItem::class, RemoteKeys::class],
     version = 1,
     exportSchema = false
 )
 abstract class StoryDatabase : RoomDatabase() {
 
     abstract fun storyDao(): StoryDao
+    abstract fun remoteKeysDao(): RemoteKeysDao
 
 
     companion object{

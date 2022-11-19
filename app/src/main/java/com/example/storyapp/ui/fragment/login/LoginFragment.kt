@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -97,7 +96,6 @@ class LoginFragment : Fragment() {
         val pref = requireContext().dataStore
         val savePreference = UserPreference.getInstance(pref)
 
-        Log.d("checkTokenRespon", "saveLoginState: ${save.name}, ${save.token}")
 
         lifecycleScope.launch{
             savePreference.saveData(true, save.name, save.token)

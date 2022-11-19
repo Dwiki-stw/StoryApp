@@ -1,6 +1,5 @@
 package com.example.storyapp.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -12,12 +11,16 @@ import com.example.storyapp.response.ListStoryItem
 
 class PagingAdapter : PagingDataAdapter<ListStoryItem, PagingAdapter.MyViewHolder>(DIFF_CALLBACK){
 
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
+        this.onItemClickCallback = onItemClickCallback
+    }
+
     class MyViewHolder(private val binding: CardStoryBinding): RecyclerView.ViewHolder(binding.root) {
        fun bind(story: ListStoryItem){
 
            val desc = get50Character(story.description.toString())
-
-           Log.d(TAG, "bind: ${story.name}")
 
            binding.apply {
                binding.username.text = story.name
@@ -28,6 +31,8 @@ class PagingAdapter : PagingDataAdapter<ListStoryItem, PagingAdapter.MyViewHolde
                    .into(imgStory)
            }
        }
+
+        val areaClick = binding.card
 
         private fun get50Character(description: String) : String{
 
@@ -41,15 +46,22 @@ class PagingAdapter : PagingDataAdapter<ListStoryItem, PagingAdapter.MyViewHolde
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val data = getItem(position)
-        Log.d(TAG, "onBindViewHolder: ${data?.name}")
         if (data != null) {
             holder.bind(data)
+        }
+
+        holder.areaClick.setOnClickListener{
+            onItemClickCallback.onItemClicked(data?.id)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = CardStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
+    }
+
+    interface OnItemClickCallback{
+        fun onItemClicked(id: String?)
     }
 
     companion object {

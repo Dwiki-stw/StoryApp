@@ -12,6 +12,7 @@
     <string name="name_in_menu">name</string>
     <string name="languange_in_menu">languange</string>
     <string name="logout_in_menu">logout</string>
+    <string name="retry">Try Again</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="send">SEND</string>
     <string name="description">Description</string>
@@ -21,5 +22,5 @@
     <string name="add_story">Add Story</string>
     <string name="capture_photo">capture photo</string>
     <string name="title_menu_user">user</string>
-    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_maps">Maps</string>
 </resources>

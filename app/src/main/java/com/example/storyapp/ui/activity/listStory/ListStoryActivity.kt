@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.viewModels
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -16,6 +15,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.storyapp.R
+import com.example.storyapp.adapter.LoadingStateAdapter
 import com.example.storyapp.adapter.PagingAdapter
 import com.example.storyapp.databinding.ActivityListStoryBinding
 import com.example.storyapp.datastore.UserPreference
@@ -23,6 +23,7 @@ import com.example.storyapp.helper.ViewModelFactory
 import com.example.storyapp.ui.activity.Authentication.AuthenticationActivity
 import com.example.storyapp.ui.activity.maps.MapsActivity
 import com.example.storyapp.ui.activity.addstory.AddStoryActivity
+import com.example.storyapp.ui.activity.detailstory.DetailStoryActivity
 import kotlinx.coroutines.launch
 
 class ListStoryActivity : AppCompatActivity() {
@@ -41,21 +42,7 @@ class ListStoryActivity : AppCompatActivity() {
         _binding = ActivityListStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         showStory()
-
-//        val userPreference = UserPreference.getInstance(dataStore)
-//        userPreference.getToken().asLiveData().observe(this){
-//            listStoryViewModel.setAuth(it)
-//        }
-//
-//        listStoryViewModel.listStory.observe(this){
-//            showStory(it)
-//        }
-//
-//        listStoryViewModel.isLoading.observe(this){
-//            showLoading(it)
-//        }
 
         binding.fab.setOnClickListener {
             val intent = Intent(this@ListStoryActivity, AddStoryActivity::class.java)
@@ -76,8 +63,6 @@ class ListStoryActivity : AppCompatActivity() {
         userPreference.getName().asLiveData().observe(this){
             user.title = it
         }
-
-
         return true
     }
 
@@ -103,30 +88,25 @@ class ListStoryActivity : AppCompatActivity() {
 
         val adapter = PagingAdapter()
         binding.rvStory.layoutManager = LinearLayoutManager(this)
-        binding.rvStory.adapter = adapter
+        binding.rvStory.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter{
+                adapter.retry()
+            }
+        )
 
         listStoryViewModel.listStory.observe(this){
             adapter.submitData(lifecycle, it)
         }
 
-//        val adapter = ListStoryAdapter(listStory)
-//        binding.rvStory.layoutManager = LinearLayoutManager(this)
-//        binding.rvStory.adapter = adapter
-//
-//        adapter.setOnItemClickCallback(object: ListStoryAdapter.OnItemClickCallback{
-//            override fun onItemClicked(id: String?) {
-//                val intent = Intent(this@ListStoryActivity, DetailStoryActivity::class.java)
-//                intent.putExtra(DetailStoryActivity.ID, id)
-//                startActivity(intent)
-//            }
-//
-//        })
-    }
+        adapter.setOnItemClickCallback(object: PagingAdapter.OnItemClickCallback{
+            override fun onItemClicked(id: String?) {
+                val intent = Intent(this@ListStoryActivity, DetailStoryActivity::class.java)
+                intent.putExtra(DetailStoryActivity.ID, id)
+                startActivity(intent)
+            }
 
-    private fun showLoading(isLoading : Boolean){
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
     }
-
 
     private fun deleteLoginState(){
         val savePreference = UserPreference.getInstance(dataStore)

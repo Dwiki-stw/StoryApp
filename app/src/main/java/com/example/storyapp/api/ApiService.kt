@@ -24,7 +24,7 @@ interface ApiService {
     ): Call<ResponseLogin>
 
     @GET("stories")
-    fun getAllStory(
+    suspend fun getAllStory(
         @Header("Authorization") auth: String,
         @Query("page") page: Int,
         @Query("size") size: Int

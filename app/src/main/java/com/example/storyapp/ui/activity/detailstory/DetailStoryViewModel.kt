@@ -20,9 +20,9 @@ class DetailStoryViewModel: ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private fun getStory(){
+    fun getStory(token: String, id: String){
         _isLoading.value = true
-        val client = ApiConfig.getApiService().getStory("Bearer $AUTH", ID)
+        val client = ApiConfig.getApiService().getStory("Bearer $token", id)
         client.enqueue(object : Callback<ResponseDetailStory>{
             override fun onResponse(
                 call: Call<ResponseDetailStory>,
@@ -46,18 +46,8 @@ class DetailStoryViewModel: ViewModel() {
         })
     }
 
-    fun setID(auth: String, id: String){
-        AUTH = auth
-        ID = id
-
-        getStory()
-    }
-
     companion object{
         private const val TAG = "DetailStoryViewModel"
-
-        private var AUTH = "auth"
-        private var ID = "id"
     }
 
 }

@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.storyapp.api.ApiConfig
+import com.example.storyapp.response.MessageLogin
 import com.example.storyapp.response.ResponseRegister
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,9 +23,9 @@ class RegisterViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private fun registerUser(){
+    fun registerUser(name: String, email: String, password: String){
         _isLoading.value = true
-        val client = ApiConfig.getApiService().register(NAME, EMAIL, PASSWORD)
+        val client = ApiConfig.getApiService().register(name, email, password)
         client.enqueue(object : Callback<ResponseRegister>{
             override fun onResponse(
                 call: Call<ResponseRegister>,
@@ -32,11 +34,13 @@ class RegisterViewModel : ViewModel() {
                 _isLoading.value = false
                 val responseBody = response.body()
                 if (response.isSuccessful && responseBody != null){
-                    Log.e(TAG, "onResponse1: ${responseBody.message}" )
                     _responseRegister.value = responseBody!!
+                    _message.value = responseBody.message
                 }
                 else{
-                    _message.value = response.message()
+                    val responseError = Gson().fromJson(response.errorBody()?.charStream(),
+                        MessageLogin::class.java)
+                    _message.value = responseError.message
                     Log.e(TAG, "onResponse2: ${response.message()}")
                 }
             }
@@ -50,20 +54,8 @@ class RegisterViewModel : ViewModel() {
         })
     }
 
-    fun setDataRegister(name: String, email: String, password: String){
-        NAME = name
-        EMAIL = email
-        PASSWORD = password
-
-        registerUser()
-    }
-
     companion object{
         private const val TAG = "RegisterViewModel"
-
-        private var NAME = "name"
-        private var EMAIL = "email"
-        private var PASSWORD = "password"
     }
 
 }

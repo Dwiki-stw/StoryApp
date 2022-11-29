@@ -32,7 +32,7 @@ class DetailStoryActivity : AppCompatActivity() {
 
         val userPreference = UserPreference.getInstance(dataStore)
         userPreference.getToken().asLiveData().observe(this){
-            detailStoryViewModel.setID(it, id)
+            detailStoryViewModel.getStory(it, id)
         }
 
         detailStoryViewModel.story.observe(this){

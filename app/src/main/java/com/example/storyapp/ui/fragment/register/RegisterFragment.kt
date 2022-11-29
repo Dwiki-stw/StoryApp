@@ -35,7 +35,7 @@ class RegisterFragment : Fragment() {
         playAnimation()
 
         binding.buttonRegister.setOnClickListener {
-            registerViewModel.setDataRegister(binding.registerName.text.toString(), binding.registerEmail.text.toString(), binding.registerPassword.text.toString())
+            registerViewModel.registerUser(binding.registerName.text.toString(), binding.registerEmail.text.toString(), binding.registerPassword.text.toString())
         }
 
         registerViewModel.isLoading.observe(viewLifecycleOwner){

@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,6 +27,8 @@ import com.example.storyapp.helper.uriToFile
 import com.example.storyapp.response.ResponseAddStory
 import com.example.storyapp.ui.activity.CameraActivity
 import com.example.storyapp.ui.activity.listStory.ListStoryActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -45,12 +48,17 @@ class AddStoryActivity : AppCompatActivity() {
 
     private var file: File? = null
 
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val userPreference = UserPreference.getInstance(dataStore)
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        getMyLocation()
 
         if (!allPermissionsGranted()){
             ActivityCompat.requestPermissions(
@@ -74,7 +82,7 @@ class AddStoryActivity : AppCompatActivity() {
         binding.btnSend.setOnClickListener{
             if (binding.tiDesc.text != null){
                 userPreference.getToken().asLiveData().observe(this){
-                    uploadStory(it)
+                    uploadStory(it, LAT, LON)
                 }
             }
         }
@@ -124,7 +132,7 @@ class AddStoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadStory(token: String){
+    private fun uploadStory(token: String, lat: Float, lon: Float){
         if(file != null){
 
             val text = binding.tiDesc.text.toString()
@@ -136,7 +144,7 @@ class AddStoryActivity : AppCompatActivity() {
                 requestImageFile
             )
             showLoading(true)
-            val client = ApiConfig.getApiService().addStory("Bearer $token", imageMultipart, description)
+            val client = ApiConfig.getApiService().addStory("Bearer $token", imageMultipart, description, lat, lon)
             client.enqueue(object : Callback<ResponseAddStory>{
                 override fun onResponse(
                     call: Call<ResponseAddStory>,
@@ -175,8 +183,45 @@ class AddStoryActivity : AppCompatActivity() {
         finish()
     }
 
+
+    private fun getMyLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) !=
+            PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                100
+            )
+            return
+        }
+        val location = fusedLocationProviderClient.lastLocation
+        location.addOnSuccessListener {
+            if (it!=null){
+                LAT = it.latitude.toFloat()
+                LON = it.longitude.toFloat()
+
+                Log.d(TAG, "getMyLocation: lat: $LAT, lon: $LON")
+            }
+        }
+    }
+
+
+
     companion object{
+        const val TAG = "AddStoryActivity"
         const val CAMERA_RESULT = 200
+
+        private var LAT = 0.0F
+        private var LON = 0.0F
 
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSION = 10

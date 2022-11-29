@@ -47,7 +47,7 @@ class LoginFragment : Fragment() {
         playAnimation()
 
         binding.buttonLogin.setOnClickListener{
-            loginViewModel.setDataLogin(binding.loginEmail.text.toString(), binding.loginPassword.text.toString())
+            loginViewModel.loginUser(binding.loginEmail.text.toString(), binding.loginPassword.text.toString())
         }
 
         loginViewModel.message.observe(viewLifecycleOwner){

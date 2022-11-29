@@ -14,6 +14,11 @@ data class ResponseLogin(
 	val message: String
 )
 
+data class MessageLogin(
+	@field:SerializedName("message")
+	val message: String
+)
+
 data class LoginResult(
 
 	@field:SerializedName("name")

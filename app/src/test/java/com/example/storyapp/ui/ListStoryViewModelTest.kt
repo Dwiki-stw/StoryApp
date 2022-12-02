@@ -39,7 +39,7 @@ class ListStoryViewModelTest{
     private lateinit var storyRepository: StoryRepository
 
     @Test
-    fun `when get story should not null and Retrun sucess`() = runTest {
+    fun `when get story should not null and Return success`() = runTest {
         val dummyStory = DataDummy.generateDummyStoryResponse()
         val data: PagingData<ListStoryItem> = StoryPagingSource.snapshot(dummyStory)
         val expectedStory = MutableLiveData<PagingData<ListStoryItem>>()

@@ -1,0 +1,45 @@
+1. LoginViewModelTest
+
+    a. ketika login sukses, pesannya adalah success
+       - memeriksa pesan tidak null.
+       - memeriksa hasil sebernarnya sesuai dengan ekspetasi.
+
+    b. ketika login dengan email yang salah, pesannya adalah user not found
+        - memeriksa pesan tidak null.
+        - memeriksa hasil sebernanya sesuai dengan ekspetasi.
+
+    c. ketika login dengan password yang salah, pesannya adalah invalid password
+        - memeriksa pesan tidak null.
+        - memeriksa hasil sebernanya sesuai dengan ekspetasi.
+
+2. RegisterViewModelTest
+
+    a. ketika register sukses, pesannya adalah user created
+        - memeriksa pesan tidak null.
+        - memeriksa hasil sebernanya sesuai dengan ekspetasi.
+
+    b. ketika register dengan password yang tidak sesuai, pesannya adalah password must be at least 6 characters long
+        - memeriksa pesan tidak null.
+        - memeriksa hasil sebernanya sesuai dengan ekspetasi.
+
+    c. ketika register dengan email yang tidak sesuai, pesannya adalah email must be a valid email
+        - memeriksa pesan tidak null.
+        - memeriksa hasil sebernanya sesuai dengan ekspetasi.
+
+3. ListStoryViewModelTest
+
+   a. ketika get Story harus menghasilkan kembalian success dan tidak null
+        - memeriksa story tidak null.
+        - memeriksa apakah hasil story sesuai dengan ekspetasi.
+        - memeriksa apakah ukuran story telah sesuai.
+        - memeriksa apakah index 0 story telah sesuai.
+
+4. MapsViewModelTest
+
+    a. ketika get list Story sukses, list story tidak boleh null
+        - memeriksa apakah list story tidak null.
+
+5. DetailStoryViewModel
+
+    a. ketika get detail story Sukses, Story tidak boleh null
+        - memeriksa apakah story tidak null.

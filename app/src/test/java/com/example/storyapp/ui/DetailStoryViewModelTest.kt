@@ -23,7 +23,7 @@ class DetailStoryViewModelTest{
     private lateinit var detailStoryViewModel: DetailStoryViewModel
 
     private val dummyToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLVRMcWpLTXBpTWdJMVlTT24iLCJpYXQiOjE2Njk3MDU3MDh9.P_mlxpa98gJqD9AoytDNRIbVUYBoRGu33SXYwJFxHec"
-    private val dummyId = "story-JD5lIbZwZf242_xI"
+    private val dummyId = "story-8X8zZfxl-7oGsG6k"
 
     @Before
     fun setUp(){

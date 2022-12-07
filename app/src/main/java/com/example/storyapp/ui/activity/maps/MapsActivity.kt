@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -40,8 +41,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val preferences = UserPreference.getInstance(dataStore)
 
-        preferences.getToken().asLiveData().observe(this){
-            mapsViewModel.getLocationStory(it)
+        preferences.getToken().asLiveData().observe(this) {
+            mapsViewModel.getLocationStory(it) { isError, message ->
+                if (isError == true) {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
 

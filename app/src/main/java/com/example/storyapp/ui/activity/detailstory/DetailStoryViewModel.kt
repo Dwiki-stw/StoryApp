@@ -20,7 +20,7 @@ class DetailStoryViewModel: ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun getStory(token: String, id: String){
+    fun getStory(token: String, id: String, callback: (Boolean?, String?) -> Unit){
         _isLoading.value = true
         val client = ApiConfig.getApiService().getStory("Bearer $token", id)
         client.enqueue(object : Callback<ResponseDetailStory>{
@@ -32,14 +32,17 @@ class DetailStoryViewModel: ViewModel() {
                 val responseBody = response.body()
                 if(response.isSuccessful && responseBody != null){
                     _story.value = responseBody.story!!
+                    callback(false, responseBody.message)
                 }
                 else{
                     Log.e(TAG, "onResponse2: ${response.message()}")
+                    callback(true, "gagal memuat")
                 }
             }
 
             override fun onFailure(call: Call<ResponseDetailStory>, t: Throwable) {
                 _isLoading.value = false
+                callback(true, "gagal memuat")
                 Log.e(TAG, "onResponse2: ${t.message}")
             }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -32,7 +33,11 @@ class DetailStoryActivity : AppCompatActivity() {
 
         val userPreference = UserPreference.getInstance(dataStore)
         userPreference.getToken().asLiveData().observe(this){
-            detailStoryViewModel.getStory(it, id)
+            detailStoryViewModel.getStory(it, id){isError, message ->
+                if(isError == true){
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
         detailStoryViewModel.story.observe(this){

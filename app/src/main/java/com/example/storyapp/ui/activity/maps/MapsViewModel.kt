@@ -17,7 +17,7 @@ class MapsViewModel : ViewModel() {
     val storyWithLocation: LiveData<List<ListStoryItem>> = _storyWithLocation
 
 
-    fun getLocationStory(token: String){
+    fun getLocationStory(token: String, callback: (Boolean?, String?) -> Unit){
         val client = ApiConfig.getApiService().getLocation("Bearer $token", 1)
         client.enqueue(object : Callback<ResponseListStory> {
             override fun onResponse(
@@ -27,10 +27,14 @@ class MapsViewModel : ViewModel() {
                 val responseBody = response.body()
                 if (response.isSuccessful && responseBody != null){
                     _storyWithLocation.value = responseBody.listStory
+                    callback(false, responseBody.message)
+                }else{
+                    callback(true, "gagal memuat")
                 }
             }
 
             override fun onFailure(call: Call<ResponseListStory>, t: Throwable) {
+                callback(true, "gagal memuat")
                 Log.e(TAG, "onFailure: ${t.message}")
             }
 

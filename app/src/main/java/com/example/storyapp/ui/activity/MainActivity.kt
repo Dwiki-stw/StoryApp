@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val binding get() = _binding!!
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preference")
+    private var isLogin: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        var isLogin = true
+
         val loginState = UserPreference.getInstance(dataStore)
         loginState.getStatusLogin().asLiveData().observe(this){
             isLogin = it

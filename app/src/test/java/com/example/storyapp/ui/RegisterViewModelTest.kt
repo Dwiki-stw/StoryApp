@@ -33,7 +33,7 @@ class RegisterViewModelTest{
     @Test
     fun `when register success Should message User created`() = runTest {
         val expectedMessage = "User created"
-        registerViewModel.registerUser("test", "testing@email.com", "123456")
+        registerViewModel.registerUser("test", "testing@email12.com", "123456")
 
         val actual = registerViewModel.message.getOrAwaitValue(1, TimeUnit.MINUTES)
 

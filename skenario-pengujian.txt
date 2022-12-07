@@ -36,10 +36,12 @@
 
 4. MapsViewModelTest
 
-    a. ketika get list Story sukses, list story tidak boleh null
-        - memeriksa apakah list story tidak null.
+    a. ketika get list Story sukses, isError false
+        - memeriksa apakah kondisi error true atau false.
+        - memeriksa apakah pesan yang didapatkan sesuai dengan ekspetasi.
 
 5. DetailStoryViewModel
 
-    a. ketika get detail story Sukses, Story tidak boleh null
-        - memeriksa apakah story tidak null.
+    a. ketika get detail story Sukses, isError false
+        - memeriksa apakah kondisi error true atau false.
+        - memeriksa apakah pesan yang didapatkan sesuai dengan ekspetasi.

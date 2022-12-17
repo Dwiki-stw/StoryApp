@@ -19,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.storyapp.databinding.FragmentLoginBinding
 import com.example.storyapp.datastore.UserPreference
+import com.example.storyapp.helper.ViewModelFactory
 import com.example.storyapp.response.LoginResult
 import com.example.storyapp.response.ResponseLogin
 import com.example.storyapp.ui.activity.listStory.ListStoryActivity
@@ -29,7 +30,9 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private val loginViewModel: LoginViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels{
+        ViewModelFactory(requireContext())
+    }
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preference")
 
@@ -47,11 +50,9 @@ class LoginFragment : Fragment() {
         playAnimation()
 
         binding.buttonLogin.setOnClickListener{
-            loginViewModel.loginUser(binding.loginEmail.text.toString(), binding.loginPassword.text.toString())
-        }
-
-        loginViewModel.message.observe(viewLifecycleOwner){
-            showResult(it.toString())
+            loginViewModel.loginUser(binding.loginEmail.text.toString(), binding.loginPassword.text.toString()){message ->
+                showResult(message)
+            }
         }
 
         loginViewModel.loginResult.observe(viewLifecycleOwner){
@@ -93,9 +94,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun saveLoginState(save: LoginResult){
-        val pref = requireContext().dataStore
-        val savePreference = UserPreference.getInstance(pref)
-
+        val savePreference = UserPreference.getInstance(requireContext().dataStore)
 
         lifecycleScope.launch{
             savePreference.saveData(true, save.name, save.token)

@@ -13,6 +13,7 @@ import androidx.lifecycle.asLiveData
 import com.bumptech.glide.Glide
 import com.example.storyapp.databinding.ActivityDetailStoryBinding
 import com.example.storyapp.datastore.UserPreference
+import com.example.storyapp.helper.ViewModelFactory
 import com.example.storyapp.response.Story
 
 class DetailStoryActivity : AppCompatActivity() {
@@ -20,7 +21,9 @@ class DetailStoryActivity : AppCompatActivity() {
     private var _binding: ActivityDetailStoryBinding? = null
     private val binding get() = _binding!!
 
-    private val detailStoryViewModel: DetailStoryViewModel by viewModels()
+    private val detailStoryViewModel: DetailStoryViewModel by viewModels{
+        ViewModelFactory(this)
+    }
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preference")
 
@@ -41,7 +44,7 @@ class DetailStoryActivity : AppCompatActivity() {
         }
 
         detailStoryViewModel.story.observe(this){
-            setupView(it)
+            setupView(it.story!!)
         }
 
         detailStoryViewModel.isLoading.observe(this){

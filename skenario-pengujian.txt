@@ -1,30 +1,17 @@
 1. LoginViewModelTest
 
-    a. ketika login sukses, pesannya adalah success
-       - memeriksa pesan tidak null.
-       - memeriksa hasil sebernarnya sesuai dengan ekspetasi.
+    a. ketika login sukses
+        - memeriksa pesan sesuai dengan ekspetasi
+        - memeriksa fungsi login di panggil
+        - memeriksa login reponse sesuai dengan ekspetasi
 
-    b. ketika login dengan email yang salah, pesannya adalah user not found
-        - memeriksa pesan tidak null.
-        - memeriksa hasil sebernanya sesuai dengan ekspetasi.
-
-    c. ketika login dengan password yang salah, pesannya adalah invalid password
-        - memeriksa pesan tidak null.
-        - memeriksa hasil sebernanya sesuai dengan ekspetasi.
 
 2. RegisterViewModelTest
 
-    a. ketika register sukses, pesannya adalah user created
-        - memeriksa pesan tidak null.
-        - memeriksa hasil sebernanya sesuai dengan ekspetasi.
+    a. ketika register sukses
+        - memeriksa pesan sesuai dengan ekspetasi
+        - memeriksa fungsi register di panggil
 
-    b. ketika register dengan password yang tidak sesuai, pesannya adalah password must be at least 6 characters long
-        - memeriksa pesan tidak null.
-        - memeriksa hasil sebernanya sesuai dengan ekspetasi.
-
-    c. ketika register dengan email yang tidak sesuai, pesannya adalah email must be a valid email
-        - memeriksa pesan tidak null.
-        - memeriksa hasil sebernanya sesuai dengan ekspetasi.
 
 3. ListStoryViewModelTest
 
@@ -36,12 +23,16 @@
 
 4. MapsViewModelTest
 
-    a. ketika get list Story sukses, isError false
-        - memeriksa apakah kondisi error true atau false.
-        - memeriksa apakah pesan yang didapatkan sesuai dengan ekspetasi.
+    a. ketika get list Story sukses
+        - memeriksa apakah kondisi error sesuai.
+        - memeriksa apakah pesan sesuai dengan ekspetasi.
+        - memeriksa fungsi getLocation di panggil.
+        - memeriksa location response sesuai dengan ekspetasi.
 
 5. DetailStoryViewModel
 
-    a. ketika get detail story Sukses, isError false
-        - memeriksa apakah kondisi error true atau false.
-        - memeriksa apakah pesan yang didapatkan sesuai dengan ekspetasi.
+    a. ketika get detail story Sukses
+        - memeriksa apakah kondisi error sesuai.
+        - memeriksa apakah pesan sesuai dengan ekspetasi.
+        - memeriksa fungsi getStory di panggil.
+        - memeriksa detail response sesuai dengan ekspetasi.

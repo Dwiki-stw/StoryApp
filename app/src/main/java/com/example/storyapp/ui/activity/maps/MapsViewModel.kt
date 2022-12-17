@@ -4,41 +4,28 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.storyapp.api.ApiConfig
-import com.example.storyapp.response.ListStoryItem
+import androidx.lifecycle.viewModelScope
+import com.example.storyapp.api.ApiService
 import com.example.storyapp.response.ResponseListStory
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
 
-class MapsViewModel : ViewModel() {
+class MapsViewModel(private val apiService: ApiService) : ViewModel() {
 
-    private val _storyWithLocation = MutableLiveData<List<ListStoryItem>>()
-    val storyWithLocation: LiveData<List<ListStoryItem>> = _storyWithLocation
+    private val _storyWithLocation = MutableLiveData<ResponseListStory>()
+    val storyWithLocation: LiveData<ResponseListStory> = _storyWithLocation
 
 
-    fun getLocationStory(token: String, callback: (Boolean?, String?) -> Unit){
-        val client = ApiConfig.getApiService().getLocation("Bearer $token", 1)
-        client.enqueue(object : Callback<ResponseListStory> {
-            override fun onResponse(
-                call: Call<ResponseListStory>,
-                response: Response<ResponseListStory>
-            ) {
-                val responseBody = response.body()
-                if (response.isSuccessful && responseBody != null){
-                    _storyWithLocation.value = responseBody.listStory
-                    callback(false, responseBody.message)
-                }else{
-                    callback(true, "gagal memuat")
-                }
+    fun getLocationStory(token: String, location: Int, callback: (Boolean, String) -> Unit){
+        viewModelScope.launch {
+            try {
+                val result = apiService.getLocation("Bearer $token", location)
+                _storyWithLocation.value = result
+                callback(result.error!!, result.message!!)
+            }catch (e: Exception){
+                Log.e(TAG, "getLocationStory: ${e.message}", )
+                callback(true, "Gagal memuat lokasi Story")
             }
-
-            override fun onFailure(call: Call<ResponseListStory>, t: Throwable) {
-                callback(true, "gagal memuat")
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-
-        })
+        }
     }
 
 

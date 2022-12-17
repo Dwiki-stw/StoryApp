@@ -16,6 +16,7 @@ import androidx.lifecycle.asLiveData
 import com.example.storyapp.R
 import com.example.storyapp.databinding.ActivityMapsBinding
 import com.example.storyapp.datastore.UserPreference
+import com.example.storyapp.helper.ViewModelFactory
 import com.example.storyapp.response.ListStoryItem
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -30,7 +31,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var _binding : ActivityMapsBinding? = null
     private val binding get() = _binding!!
 
-    private val mapsViewModel : MapsViewModel by viewModels()
+    private val mapsViewModel : MapsViewModel by viewModels{
+        ViewModelFactory(this)
+    }
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preference")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +45,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val preferences = UserPreference.getInstance(dataStore)
 
         preferences.getToken().asLiveData().observe(this) {
-            mapsViewModel.getLocationStory(it) { isError, message ->
-                if (isError == true) {
+            mapsViewModel.getLocationStory(it, 1) { isError, message ->
+                if (isError!!) {
                     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -67,7 +70,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isMapToolbarEnabled = true
 
         mapsViewModel.storyWithLocation.observe(this){
-            createMarkerStory(it, mMap)
+            createMarkerStory(it.listStory, mMap)
         }
 
         getMyLocation()

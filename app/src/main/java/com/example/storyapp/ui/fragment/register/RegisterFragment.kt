@@ -12,13 +12,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.example.storyapp.databinding.FragmentRegisterBinding
+import com.example.storyapp.helper.ViewModelFactory
 
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val registerViewModel: RegisterViewModel by viewModels()
+    private val registerViewModel: RegisterViewModel by viewModels{
+        ViewModelFactory(requireContext())
+    }
 
 
     override fun onCreateView(
@@ -35,22 +38,14 @@ class RegisterFragment : Fragment() {
         playAnimation()
 
         binding.buttonRegister.setOnClickListener {
-            registerViewModel.registerUser(binding.registerName.text.toString(), binding.registerEmail.text.toString(), binding.registerPassword.text.toString())
+            registerViewModel.registerUser(binding.registerName.text.toString(), binding.registerEmail.text.toString(), binding.registerPassword.text.toString()){message ->
+                showResult(message)
+            }
         }
 
         registerViewModel.isLoading.observe(viewLifecycleOwner){
             showLoading(it)
         }
-
-        registerViewModel.responseRegister.observe(viewLifecycleOwner){
-            showResult(it.message)
-        }
-
-        registerViewModel.message.observe(viewLifecycleOwner){
-            showResult(it)
-        }
-
-
     }
 
     override fun onDestroy() {

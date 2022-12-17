@@ -10,18 +10,18 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("register")
-    fun register(
+    suspend fun register(
         @Field("name") name: String,
         @Field("email") email: String,
         @Field("password") password: String
-    ): Call<ResponseRegister>
+    ): ResponseRegister
 
     @FormUrlEncoded
     @POST("login")
-    fun login(
+    suspend fun login(
         @Field("email") email: String,
         @Field("password") password: String
-    ): Call<ResponseLogin>
+    ): ResponseLogin
 
     @GET("stories")
     suspend fun getAllStory(
@@ -31,10 +31,10 @@ interface ApiService {
     ): ResponseListStory
 
     @GET("stories")
-    fun getLocation(
+    suspend fun getLocation(
         @Header("Authorization") auth: String,
         @Query("location") location: Int
-    ): Call<ResponseListStory>
+    ): ResponseListStory
 
     @Multipart
     @POST("stories")
@@ -47,9 +47,9 @@ interface ApiService {
     ): Call<ResponseAddStory>
 
     @GET("stories/{id}")
-    fun getStory(
+    suspend fun getStory(
         @Header("Authorization") auth: String,
         @Path("id") id: String
-    ): Call<ResponseDetailStory>
+    ): ResponseDetailStory
 
 }
